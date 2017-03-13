@@ -41,6 +41,7 @@ Linux: Install miniconda on your workstation. Create and activate the conda envi
   source activate my_conda_env
   
   conda install scipy
+  
   conda install scikit-learn
 
 Then follow the usual procedure of building Neuroproof_minimal:
@@ -51,7 +52,7 @@ Then follow the usual procedure of building Neuroproof_minimal:
 
   cmake -DCMAKE_PREFIX_PATH=[CONDA_ENV_PATH]/my_conda_env ..
 
- 
+  make
   
   
   
