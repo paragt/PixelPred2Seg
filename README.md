@@ -27,7 +27,7 @@ To run agglomeration :
 
 The comparison code is a snippet from the GALA github repo (https://github.com/janelia-flyem/gala/tree/master/gala) that has been used for multiple publications and for the EM segmentation challenge CREMI (https://cremi.org/). The parameters that have been faithfully computing the segmentation error for me are the provided below, I suggest the users to use the same values so that we can make a fair comparison among all variants. 
 
- ./comparestacks --stack1 result_filename.h5  --stackbase seg_groundtruth_filename.h5 --dilate1 1 --dilatebase 1 --relabel1 --relabelbase --filtersize 100
+ ./comparestacks --stack1 result_filename.h5  --stackbase seg_groundtruth_filename.h5 --dilate1 1 --dilatebase 1 --relabel1 --relabelbase --filtersize 100 --anisotropic
 
 
 # Build

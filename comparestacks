@@ -3,9 +3,9 @@
 import os
 import sys
 import pdb
-
-this_dir = os.path.realpath(sys.argv[0])
-pkg_dir = os.path.realpath(os.path.join(this_dir, '.'))
+#pdb.set_trace()
+this_dir = os.path.realpath(os.path.dirname(sys.argv[0]))
+pkg_dir = os.path.realpath(os.path.join(this_dir, 'segeval'))
 #pkg_dir = os.path.realpath(os.path.join(p_dir, '..'))
 sys.path.insert(0, pkg_dir)
 
@@ -39,6 +39,7 @@ if __name__ == "__main__" :
     
     parser.add_argument('--relabel1', action='store_true', default=False, help='Relabel ids in stack 1 to prevent memory issues', dest='relabel1')
     parser.add_argument('--relabelbase', action='store_true', default=False, help='Relabel ids in stack base to prevent memory issues', dest='relabelbase')
+    parser.add_argument('--anisotropic', action='store_true', default=False, help='Modify strel for anisotropy', dest='anisotropic')
     parser.add_argument('--filtersize', type=int, default=1000, help='Size below which comparisons are not made', dest='filtersize')
     parser.add_argument('--VIthres', type=float, default=0.02, help='VI difference below which is unimportant', dest='VIthres')
     parser.add_argument('--stack1_outjson', type=str, default='stack1_merged.json', help='output json file name for stack 1 (outputs over-merged bodies in stack 1)', dest='stack1_outjson')
@@ -61,11 +62,17 @@ if __name__ == "__main__" :
     else: 
         stack1_int = imio.raveler_to_labeled_volume(stack1, glia=False, use_watershed=False)
     stack1_int = morpho.remove_small_connected_components(stack1_int, min_size=filtersize, in_place=True)
-   
+    
+    #pdb.set_trace()
+    
     if args.dilate1 > 0:
         conn = 1 # the connectivity, can be in {1, 2, ..., seg.ndim}
-        strel = generate_binary_structure(stack1_int.ndim, conn)        
         bound = morpho.seg_to_bdry(stack1_int)
+        strel = generate_binary_structure(stack1_int.ndim, conn)
+        if args.anisotropic==True:
+            strel[0,1,1]=False
+            strel[2,1,1]=False
+        
         bound = binary_dilation(bound, strel, iterations=args.dilate1)
         stack1_int[bound] = 0
     #pdb.set_trace()
@@ -87,8 +94,11 @@ if __name__ == "__main__" :
     
     if args.dilatebase > 0:
         conn = 1 # the connectivity, can be in {1, 2, ..., seg.ndim}
-        strel = generate_binary_structure(stackbase_int.ndim, conn)        
         bound = morpho.seg_to_bdry(stackbase_int)
+        strel = generate_binary_structure(stackbase_int.ndim, conn)        
+        if args.anisotropic==True:
+            strel[0,1,1]=False
+            strel[2,1,1]=False
         bound = binary_dilation(bound, strel, iterations=args.dilatebase)
         stackbase_int[bound] = 0
 
