@@ -67,15 +67,16 @@ if __name__ == "__main__" :
     
     if args.dilate1 > 0:
         conn = 1 # the connectivity, can be in {1, 2, ..., seg.ndim}
-        bound = morpho.seg_to_bdry(stack1_int)
+        bound = morpho.seg_to_bdry(stack1_int,anisotropic=True)
         strel = generate_binary_structure(stack1_int.ndim, conn)
         if args.anisotropic==True:
+            print 'anisotropic dilation'
             strel[0,1,1]=False
             strel[2,1,1]=False
         
         bound = binary_dilation(bound, strel, iterations=args.dilate1)
         stack1_int[bound] = 0
-    #pdb.set_trace()
+    pdb.set_trace()
     if args.relabel1:
         stack1_int, dummy1, dummy2 = ev.relabel_from_one(stack1_int)
     print "Imported first stack with "+ str(unique(stack1_int).size) + " regions"
@@ -94,7 +95,7 @@ if __name__ == "__main__" :
     
     if args.dilatebase > 0:
         conn = 1 # the connectivity, can be in {1, 2, ..., seg.ndim}
-        bound = morpho.seg_to_bdry(stackbase_int)
+        bound = morpho.seg_to_bdry(stackbase_int,anisotropic=True)
         strel = generate_binary_structure(stackbase_int.ndim, conn)        
         if args.anisotropic==True:
             strel[0,1,1]=False

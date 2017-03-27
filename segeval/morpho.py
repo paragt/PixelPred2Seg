@@ -403,9 +403,15 @@ def damify(a, in_place=False):
     b[seg_to_bdry(a)] = 0
     return b
 
-def seg_to_bdry(seg, connectivity=1):
+def seg_to_bdry(seg, connectivity=1, anisotropic=False):
     """Given a borderless segmentation, return the boundary map."""
     strel = generate_binary_structure(seg.ndim, connectivity)
+    if anisotropic==True:
+        print 'anisotropic dilation in morpho.py'
+        strel[0,1,1]=False
+        strel[2,1,1]=False
+    
+        
     return maximum_filter(seg, footprint=strel) != \
            minimum_filter(seg, footprint=strel)
     
