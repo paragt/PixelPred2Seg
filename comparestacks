@@ -67,7 +67,7 @@ if __name__ == "__main__" :
     
     if args.dilate1 > 0:
         conn = 1 # the connectivity, can be in {1, 2, ..., seg.ndim}
-        bound = morpho.seg_to_bdry(stack1_int,anisotropic=True)
+        bound = morpho.seg_to_bdry(stack1_int,anisotropic=args.anisotropic)
         strel = generate_binary_structure(stack1_int.ndim, conn)
         if args.anisotropic==True:
             print 'anisotropic dilation'
@@ -95,7 +95,7 @@ if __name__ == "__main__" :
     
     if args.dilatebase > 0:
         conn = 1 # the connectivity, can be in {1, 2, ..., seg.ndim}
-        bound = morpho.seg_to_bdry(stackbase_int,anisotropic=True)
+        bound = morpho.seg_to_bdry(stackbase_int,anisotropic=args.anisotropic)
         strel = generate_binary_structure(stackbase_int.ndim, conn)        
         if args.anisotropic==True:
             strel[0,1,1]=False
